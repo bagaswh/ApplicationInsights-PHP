@@ -1,6 +1,8 @@
 <?php
+
 namespace ApplicationInsights\Tests;
 
+use ApplicationInsights\Telemetry_Client;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class Telemetry_Client_Test extends TestCase
 {
-    private $_telemetryClient;
+    private Telemetry_Client $_telemetryClient;
 
     protected function setUp()
     {
@@ -35,12 +37,9 @@ class Telemetry_Client_Test extends TestCase
      */
     public function testCompleteException()
     {
-        try
-        {
+        try {
             Utils::throwNestedException(3);
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $this->_telemetryClient->trackException($ex, ['InlineProperty' => 'test_value'], ['duration_inner' => 42.0]);
         }
 
@@ -50,13 +49,18 @@ class Telemetry_Client_Test extends TestCase
         $searchStrings = array("\\");
         $replaceStrings = array("\\\\");
 
-        $expectedString = str_replace($searchStrings, $replaceStrings, '[{"ver":1,"name":"Microsoft.ApplicationInsights.Exception","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"11111111-1111-1111-1111-111111111111","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"exceptions":[{"typeName":"Exception","message":"testException in \/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php on line 130","hasFullStack":true,"id":1,"parsedStack":[{"level":"13","method":"main","assembly":"PHPUnit\\TextUI\\Command","fileName":"\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit","line":588},{"level":"12","method":"run","assembly":"PHPUnit\\TextUI\\Command","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":151},{"level":"11","method":"doRun","assembly":"PHPUnit\\TextUI\\TestRunner","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":198},{"level":"10","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/TestRunner.php","line":529},{"level":"9","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"8","method":"run","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"7","method":"run","assembly":"PHPUnit\\Framework\\TestResult","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":798},{"level":"6","method":"runBare","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestResult.php","line":645},{"level":"5","method":"runTest","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":840},{"level":"4","method":"testCompleteException","assembly":"ApplicationInsights\\Tests\\Telemetry_Client_Test","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":1145},{"level":"3","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Telemetry_Client_Test.php","line":40},{"level":"2","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php","line":133},{"level":"1","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php","line":133},{"level":"0","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php","line":133}]}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"ExceptionData"}}]');
+        $expectedString = str_replace($searchStrings, $replaceStrings, '[{"ver":1,"name":"Microsoft.ApplicationInsights.Exception","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"11111111-1111-1111-1111-111111111111","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"exceptions":[{"typeName":"Exception","message":"testException in \/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php on line 130","hasFullStack":true,"id":1,"parsedStack":[{"level":"13","method":"main","assembly":"PHPUnit\\TextUI\\Command","fileName":"\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit","line":588},{"level":"12","method":"run","assembly":"PHPUnit\\TextUI\\Command","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":151},{"level":"11","method":"doRun","assembly":"PHPUnit\\TextUI\\TestRunner","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":198},{"level":"10","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/TestRunner.php","line":529},{"level":"9","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"8","method":"run","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"7","method":"run","assembly":"PHPUnit\\Framework\\TestResult","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":798},{"level":"6","method":"runBare","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestResult.php","line":645},{"level":"5","method":"runTest","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":840},{"level":"4","method":"testCompleteException","assembly":"ApplicationInsights\\Tests\\Telemetry_Client_Test","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":1145},{"level":"3","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Telemetry_Client_Test.php","line":41},{"level":"2","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php","line":133},{"level":"1","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php","line":133},{"level":"0","method":"throwNestedException","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php","line":133}]}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"ExceptionData"}}]');
         $expectedValue = json_decode($expectedString, true);
+        // echo json_encode($expectedValue, JSON_PRETTY_PRINT);
+        // die;
+        // $expectedValue[0]['data']
 
-        $this->assertEquals($this->removeMachineSpecificExceptionData($expectedValue, 4), $this->removeMachineSpecificExceptionData($queue, 4));
+        $this->assertEquals(
+            $this->removeMachineSpecificExceptionData($expectedValue, 4),
+            $this->removeMachineSpecificExceptionData($queue, 4)
+        );
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -70,18 +74,14 @@ class Telemetry_Client_Test extends TestCase
     {
         $errorsSupported = false;
 
-        try
-        {
+        try {
             Utils::throwError();
-        }
-        catch (\Error $err)
-        {
+        } catch (\Error $err) {
             $errorsSupported = true;
             $this->_telemetryClient->trackException($err, ['InlineProperty' => 'test_value'], ['duration_inner' => 42.0]);
         }
 
-        if (!$errorsSupported)
-        {
+        if (!$errorsSupported) {
             return;
         }
 
@@ -91,13 +91,12 @@ class Telemetry_Client_Test extends TestCase
         $searchStrings = array("\\");
         $replaceStrings = array("\\\\");
 
-        $expectedString = str_replace($searchStrings, $replaceStrings, '[{"ver":1,"name":"Microsoft.ApplicationInsights.Exception","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"11111111-1111-1111-1111-111111111111","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"exceptions":[{"typeName":"ParseError","message":"syntax error, unexpected \'asdlkja\' (T_STRING) in \/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php(141) : eval()\'d code on line 1","hasFullStack":true,"id":1,"parsedStack":[{"level":"10","method":"main","assembly":"PHPUnit\\TextUI\\Command","fileName":"\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit","line":588},{"level":"9","method":"run","assembly":"PHPUnit\\TextUI\\Command","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":151},{"level":"8","method":"doRun","assembly":"PHPUnit\\TextUI\\TestRunner","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":198},{"level":"7","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/TestRunner.php","line":529},{"level":"6","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"5","method":"run","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"4","method":"run","assembly":"PHPUnit\\Framework\\TestResult","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":798},{"level":"3","method":"runBare","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestResult.php","line":645},{"level":"2","method":"runTest","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":840},{"level":"1","method":"testCompleteError","assembly":"ApplicationInsights\\Tests\\Telemetry_Client_Test","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":1145},{"level":"0","method":"throwError","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Telemetry_Client_Test.php","line":75}]}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"ExceptionData"}}]');
+        $expectedString = str_replace($searchStrings, $replaceStrings, '[{"ver":1,"name":"Microsoft.ApplicationInsights.Exception","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"11111111-1111-1111-1111-111111111111","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"exceptions":[{"typeName":"ParseError","message":"syntax error, unexpected \'asdlkja\' (T_STRING) in \/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Utils.php(141) : eval()\'d code on line 1","hasFullStack":true,"id":1,"parsedStack":[{"level":"10","method":"main","assembly":"PHPUnit\\TextUI\\Command","fileName":"\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit","line":588},{"level":"9","method":"run","assembly":"PHPUnit\\TextUI\\Command","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":151},{"level":"8","method":"doRun","assembly":"PHPUnit\\TextUI\\TestRunner","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/Command.php","line":198},{"level":"7","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/TextUI\/TestRunner.php","line":529},{"level":"6","method":"run","assembly":"PHPUnit\\Framework\\TestSuite","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"5","method":"run","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestSuite.php","line":776},{"level":"4","method":"run","assembly":"PHPUnit\\Framework\\TestResult","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":798},{"level":"3","method":"runBare","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestResult.php","line":645},{"level":"2","method":"runTest","assembly":"PHPUnit\\Framework\\TestCase","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":840},{"level":"1","method":"testCompleteError","assembly":"ApplicationInsights\\Tests\\Telemetry_Client_Test","fileName":"phar:\/\/\/usr\/local\/Cellar\/phpunit\/7.1.5\/bin\/phpunit\/phpunit\/Framework\/TestCase.php","line":1145},{"level":"0","method":"throwError","assembly":"ApplicationInsights\\Tests\\Utils","fileName":"\/Users\/sergeykanzhelev\/src\/ApplicationInsights\/php\/Tests\/Telemetry_Client_Test.php","line":78}]}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"ExceptionData"}}]');
         $expectedValue = json_decode($expectedString, true);
 
         $this->assertEquals($this->removeMachineSpecificExceptionData($expectedValue, 1), $this->removeMachineSpecificExceptionData($queue, 1));
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -124,9 +123,7 @@ class Telemetry_Client_Test extends TestCase
             $telemetryChannel = new \ApplicationInsights\Channel\Telemetry_Channel('/what', $client);
             $telemetryClient = new \ApplicationInsights\Telemetry_Client(null, $telemetryChannel);
             $this->assertEquals($telemetryClient->getChannel()->GetClient(), new \GuzzleHttp\Client(['base_uri' => $baseUrl]));
-        }
-        else
-        {
+        } else {
             $this->markTestSkipped("\GuzzleHttp\Client does not exist");
         }
     }
@@ -141,12 +138,11 @@ class Telemetry_Client_Test extends TestCase
 
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
         $queue = $this->adjustDataInQueue($queue);
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Event","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myEvent","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"EventData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Event","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myEvent2","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"EventData"}}]', true);
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Event","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myEvent","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"EventData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Event","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myEvent2","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"EventData"}}]', true);
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -161,12 +157,11 @@ class Telemetry_Client_Test extends TestCase
 
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
         $queue = $this->adjustDataInQueue($queue);
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.PageView","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myPageView","url":"http:\/\/www.foo.com","duration":"00:00:00.256","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"PageViewData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.PageView","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myPageView2","url":"http:\/\/www.foo.com","duration":"00:00:00.256","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"PageViewData"}}]', true);
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.PageView","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myPageView","url":"http:\/\/www.foo.com","duration":"00:00:00.256","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"PageViewData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.PageView","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"myPageView2","url":"http:\/\/www.foo.com","duration":"00:00:00.256","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration":42}},"baseType":"PageViewData"}}]', true);
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -181,12 +176,11 @@ class Telemetry_Client_Test extends TestCase
 
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
         $queue = $this->adjustDataInQueue($queue);
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Metric","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"metrics":[{"name":"myMetric","kind":1,"value":42,"count":5,"max":1,"stdDev":0.2}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MetricData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Metric","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"metrics":[{"name":"myMetric2","kind":1,"value":42,"count":5,"max":1,"stdDev":0.2}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MetricData"}}]', true);
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Metric","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"metrics":[{"name":"myMetric","kind":1,"value":42,"count":5,"max":1,"stdDev":0.2}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MetricData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Metric","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"metrics":[{"name":"myMetric2","kind":1,"value":42,"count":5,"max":1,"stdDev":0.2}],"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MetricData"}}]', true);
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -196,17 +190,23 @@ class Telemetry_Client_Test extends TestCase
      */
     public function testCompleteRequest()
     {
-        $this->_telemetryClient->trackRequest('myRequest', 'http://foo.bar', time(), 3754, 200, true, ['InlineProperty' => 'test_value'], ['duration_inner' => 42.0]);
+        $dependencyId = 'some_request_id';
+        $this->_telemetryClient->trackRequest('myRequest', 'http://foo.bar', time(), 3754, 200, true, ['InlineProperty' => 'test_value'], ['duration_inner' => 42.0], $dependencyId);
+
+        // random guid
         $this->_telemetryClient->trackRequest('myRequest2', 'http://foo.bar', time(), 3754, 200, false, ['InlineProperty' => 'test_value'], ['duration_inner' => 42.0]);
 
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
-        $queue = $this->adjustDataInQueue($queue);
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":true,"name":"myRequest","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":false,"name":"myRequest2","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}}]', true);
+        $queue = array_merge(
+            $this->adjustDataInQueue([$queue[0]], ['strip_id' => false]),
+            $this->adjustDataInQueue([$queue[1]])
+        );
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":true,"name":"myRequest","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":false,"name":"myRequest2","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}}]', true);
+        $expectedValue[0]['data']['baseData']['id'] = $dependencyId;
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -216,7 +216,8 @@ class Telemetry_Client_Test extends TestCase
      */
     public function testCompleteBeginEndRequest()
     {
-        $request = $this->_telemetryClient->beginRequest('myRequest', 'http://foo.bar', time());
+        $dependencyId = 'some_dep_id_begin_end-request';
+        $request = $this->_telemetryClient->beginRequest('myRequest', 'http://foo.bar', time(), $dependencyId);
 
         // that shouldn't have queued anything so the queue should be empty
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
@@ -231,12 +232,11 @@ class Telemetry_Client_Test extends TestCase
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
         $queue = $this->adjustDataInQueue($queue);
         // expected to look exactly the same as testCompleteRequest
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":true,"name":"myRequest","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":false,"name":"myRequest2","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}}]', true);
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":true,"name":"myRequest","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Request","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"id":"ID_PLACEHOLDER","duration":"00:00:03.754","responseCode":200,"success":false,"name":"myRequest2","url":"http:\/\/foo.bar","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"},"measurements":{"duration_inner":42}},"baseType":"RequestData"}}]', true);
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -251,12 +251,11 @@ class Telemetry_Client_Test extends TestCase
 
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
         $queue = $this->adjustDataInQueue($queue);
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Message","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"message":"myMessage","severityLevel":3,"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MessageData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Message","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"message":"myMessage2","severityLevel":1,"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MessageData"}}]', true);
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.Message","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"message":"myMessage","severityLevel":3,"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MessageData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.Message","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"message":"myMessage2","severityLevel":1,"properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"MessageData"}}]', true);
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -266,18 +265,26 @@ class Telemetry_Client_Test extends TestCase
      */
     public function testCompleteDependency()
     {
-        $this->_telemetryClient->trackDependency('Sql', 'SQL', 'SELECT * FROM hola;', time(), 100, true, 200, ['InlineProperty' => 'test_value']);
+        $dependencyId = 'some_defined_dep_id';
+        $this->_telemetryClient->trackDependency('Sql', 'SQL', 'SELECT * FROM hola;', time(), 100, true, 200, ['InlineProperty' => 'test_value'], $dependencyId);
+        // will be assigned random guid
         $this->_telemetryClient->trackDependency('http://example.com/api/method', 'HTTP', null, time(), 100, false, 503, ['InlineProperty' => 'test_value']);
         $this->_telemetryClient->trackDependency('Other', 'OTHER', 'Other text', time(), 100, true, 200, ['InlineProperty' => 'test_value']);
 
         $queue = json_decode($this->_telemetryClient->getChannel()->getSerializedQueue(), true);
-        $queue = $this->adjustDataInQueue($queue);
-        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.RemoteDependency","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"Sql","type":"SQL","data":"SELECT * FROM hola;","duration":"00:00:00.100","success":true,"resultCode":"200","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"RemoteDependencyData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.RemoteDependency","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"http:\/\/example.com\/api\/method","duration":"00:00:00.100","success":false,"type":"HTTP","resultCode":"503","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"RemoteDependencyData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.RemoteDependency","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"'. Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"Other","type":"OTHER","data":"Other text","duration":"00:00:00.100","success":true,"resultCode":"200","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"RemoteDependencyData"}}]', true);
+        // first item uses a defined id but not the rest
+        $queue = array_merge(
+            $this->adjustDataInQueue([$queue[0]], ['strip_id' => false]),
+            $this->adjustDataInQueue(array_slice($queue, 1))
+        );
+        $expectedValue = json_decode('[{"ver":1,"name":"Microsoft.ApplicationInsights.RemoteDependency","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"Sql","type":"SQL","data":"SELECT * FROM hola;","duration":"00:00:00.100","success":true,"resultCode":"200","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"RemoteDependencyData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.RemoteDependency","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"http:\/\/example.com\/api\/method","duration":"00:00:00.100","success":false,"type":"HTTP","resultCode":"503","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"RemoteDependencyData"}},{"ver":1,"name":"Microsoft.ApplicationInsights.RemoteDependency","time":"TIME_PLACEHOLDER","sampleRate":100,"iKey":"' . Utils::getTestInstrumentationKey() . '","tags":{"ai.application.ver":"1.0.0.0","ai.cloud.role":"my_role_name","ai.cloud.roleInstance":"my_role_instance","ai.device.id":"my_device_id","ai.device.locale":"EN","ai.device.model":"my_device_model","ai.device.oemName":"my_device_oem_name","ai.device.osVersion":"Windows 8","ai.device.type":"PC","ai.location.ip":"127.0.0.0","ai.operation.id":"my_operation_id","ai.operation.name":"my_operation_name","ai.operation.parentId":"my_operation_parent_id","ai.session.id":"my_session_id","ai.session.isFirst":"false","ai.user.id":"my_user_id","ai.user.accountId":"my_account_id","ai.internal.sdkVersion":"SDK_VERSION_STRING"},"data":{"baseData":{"ver":2,"name":"Other","type":"OTHER","data":"Other text","duration":"00:00:00.100","success":true,"resultCode":"200","properties":{"InlineProperty":"test_value","MyCustomProperty":42,"MyCustomProperty2":"test"}},"baseType":"RemoteDependencyData"}}]', true);
+        $expectedValue[0]['data']['baseData']['id'] = $dependencyId;
+        $expectedValue[1]['data']['baseData']['id'] = 'ID_PLACEHOLDER';
+        $expectedValue[2]['data']['baseData']['id'] = 'ID_PLACEHOLDER';
 
         $this->assertEquals($queue, $expectedValue);
 
-        if (Utils::sendDataToServer())
-        {
+        if (Utils::sendDataToServer()) {
             $this->_telemetryClient->flush();
         }
     }
@@ -305,36 +312,26 @@ class Telemetry_Client_Test extends TestCase
      */
     private function removeMachineSpecificExceptionData($queue, $maxLevel)
     {
-        foreach ($queue as &$queueItem)
-        {
-            foreach ($queueItem['data']['baseData']['exceptions'] as &$exception)
-            {
-                if (preg_match('([A-Za-z]+\.php)', $exception['message'], $matches) == 1)
-                {
+        foreach ($queue as &$queueItem) {
+            foreach ($queueItem['data']['baseData']['exceptions'] as &$exception) {
+                if (preg_match('([A-Za-z]+\.php)', $exception['message'], $matches) == 1) {
                     $exception['message'] = $matches[0];
-                }
-                else
-                {
+                } else {
                     $exception['message'] = NULL;
                 }
 
                 $exception['parsedStack'] =
-                    array_filter($exception['parsedStack'], function($e) use($maxLevel){
+                    array_filter($exception['parsedStack'], function ($e) use ($maxLevel) {
                         return $e['level'] < $maxLevel;
                     });
-                
-                $exception['parsedStack'] = array_combine(range(0, count($exception['parsedStack'])-1), $exception['parsedStack']);
 
-                foreach ($exception['parsedStack'] as &$stackFrame)
-                {
-                    if (array_key_exists('fileName', $stackFrame))
-                    {
-                        if (preg_match('([A-Za-z]+\.php)', $stackFrame['fileName'], $matches) == 1)
-                        {
+                $exception['parsedStack'] = array_combine(range(0, count($exception['parsedStack']) - 1), $exception['parsedStack']);
+
+                foreach ($exception['parsedStack'] as &$stackFrame) {
+                    if (array_key_exists('fileName', $stackFrame)) {
+                        if (preg_match('([A-Za-z]+\.php)', $stackFrame['fileName'], $matches) == 1) {
                             $stackFrame['fileName'] = $matches[0];
-                        }
-                        else
-                        {
+                        } else {
                             $stackFrame['fileName'] = NULL;
                         }
                     }
@@ -349,14 +346,13 @@ class Telemetry_Client_Test extends TestCase
      * @param array $queue The queue of items
      * @return array
      */
-    private function adjustDataInQueue($queue)
+    private function adjustDataInQueue($queue, array $options = [])
     {
-        foreach ($queue as &$queueItem)
-        {
+        $options = array_merge(['strip_id' => true], $options);
+        foreach ($queue as &$queueItem) {
             $queueItem['time'] = 'TIME_PLACEHOLDER';
             $queueItem['tags']['ai.internal.sdkVersion'] = 'SDK_VERSION_STRING';
-            if (array_key_exists('id', $queueItem['data']['baseData']) == true)
-            {
+            if (array_key_exists('id', $queueItem['data']['baseData']) == true && $options['strip_id']) {
                 $queueItem['data']['baseData']['id'] = 'ID_PLACEHOLDER';
             }
         }
