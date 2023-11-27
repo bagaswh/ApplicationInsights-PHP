@@ -1,4 +1,5 @@
 <?php
+
 namespace ApplicationInsights;
 
 /**
@@ -18,7 +19,7 @@ class Telemetry_Client
      */
     private $_channel;
 
-     /**
+    /**
      * Initializes a new Telemetry_Client.
      * @param \ApplicationInsights\Telemetry_Context $context
      * @param \ApplicationInsights\Channel\Telemetry_Channel $channel
@@ -61,12 +62,10 @@ class Telemetry_Client
         $data->setName($name);
         $data->setUrl($url);
         $data->setDuration(Channel\Contracts\Utils::convertMillisecondsToTimeSpan($duration));
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $data->setProperties($properties);
         }
-        if ($measurements != NULL)
-        {
+        if ($measurements != NULL) {
             $data->setMeasurements($measurements);
         }
 
@@ -97,8 +96,7 @@ class Telemetry_Client
 
         $data = new Channel\Contracts\Metric_Data();
         $data->setMetrics(array($dataPoint));
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $data->setProperties($properties);
         }
 
@@ -115,12 +113,10 @@ class Telemetry_Client
     {
         $data = new Channel\Contracts\Event_Data();
         $data->setName($name);
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $data->setProperties($properties);
         }
-        if ($measurements != NULL)
-        {
+        if ($measurements != NULL) {
             $data->setMeasurements($measurements);
         }
 
@@ -139,8 +135,7 @@ class Telemetry_Client
         $data->setMessage($message);
         $data->setSeverityLevel($severityLevel);
 
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $data->setProperties($properties);
         }
 
@@ -158,9 +153,25 @@ class Telemetry_Client
      * @param array $properties An array of name to value pairs. Use the name as the index and any string as the value.
      * @param array $measurements An array of name to double pairs. Use the name as the index and any double as the value.
      */
-    public function trackRequest($name, $url, $startTime, $durationInMilliseconds = 0, $httpResponseCode = 200, $isSuccessful = true, $properties = NULL, $measurements = NULL )
-    {
-        $this->endRequest($this->beginRequest($name, $url, $startTime), $durationInMilliseconds, $httpResponseCode, $isSuccessful, $properties, $measurements );
+    public function trackRequest(
+        $name,
+        $url,
+        $startTime,
+        $durationInMilliseconds = 0,
+        $httpResponseCode = 200,
+        $isSuccessful = true,
+        $properties = NULL,
+        $measurements = NULL,
+        $id = NULL
+    ) {
+        $this->endRequest(
+            $this->beginRequest($name, $url, $startTime, $id),
+            $durationInMilliseconds,
+            $httpResponseCode,
+            $isSuccessful,
+            $properties,
+            $measurements
+        );
     }
 
     /**
@@ -171,10 +182,10 @@ class Telemetry_Client
      * @param int $startTime The timestamp at which the request started.
      * @return \ApplicationInsights\Channel\Contracts\Request_Data an initialized Request_Data, which can be sent by using @see endRequest
      */
-    public function beginRequest($name, $url, $startTime )
+    public function beginRequest($name, $url, $startTime, $id = null)
     {
         $data = new Channel\Contracts\Request_Data();
-        $guid = \ApplicationInsights\Channel\Contracts\Utils::returnGuid();
+        $guid = $id ?? \ApplicationInsights\Channel\Contracts\Utils::returnGuid();
         $data->setId($guid);
         $data->setName($name);
         $data->setUrl($url);
@@ -191,20 +202,18 @@ class Telemetry_Client
      * @param array $properties An array of name to value pairs. Use the name as the index and any string as the value.
      * @param array $measurements An array of name to double pairs. Use the name as the index and any double as the value.
      */
-    public function endRequest( Channel\Contracts\Request_Data $request, $durationInMilliseconds = 0, $httpResponseCode = 200, $isSuccessful = true, $properties = NULL, $measurements = NULL  )
+    public function endRequest(Channel\Contracts\Request_Data $request, $durationInMilliseconds = 0, $httpResponseCode = 200, $isSuccessful = true, $properties = NULL, $measurements = NULL)
     {
         $request->setResponseCode($httpResponseCode);
         $request->setSuccess($isSuccessful);
 
         $request->setDuration(Channel\Contracts\Utils::convertMillisecondsToTimeSpan($durationInMilliseconds));
 
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $request->setProperties($properties);
         }
 
-        if ($measurements != NULL)
-        {
+        if ($measurements != NULL) {
             $request->setMeasurements($measurements);
         }
 
@@ -223,35 +232,30 @@ class Telemetry_Client
         $details->setId(1);
         $details->setOuterId(0);
         $details->setTypeName(get_class($ex));
-        $details->setMessage($ex->getMessage().' in '.$ex->getFile().' on line '.$ex->getLine());
+        $details->setMessage($ex->getMessage() . ' in ' . $ex->getFile() . ' on line ' . $ex->getLine());
         $details->setHasFullStack(true);
 
         $stackFrames = array();
 
         // First stack frame is in the root exception
         $frameCounter = 0;
-        foreach ($ex->getTrace() as $currentFrame)
-        {
-        	$stackFrame = new Channel\Contracts\Stack_Frame();
-            if (array_key_exists('class', $currentFrame) == true)
-            {
+        foreach ($ex->getTrace() as $currentFrame) {
+            $stackFrame = new Channel\Contracts\Stack_Frame();
+            if (array_key_exists('class', $currentFrame) == true) {
                 $stackFrame->setAssembly($currentFrame['class']);
             }
-            if (array_key_exists('file', $currentFrame) == true)
-            {
+            if (array_key_exists('file', $currentFrame) == true) {
                 $stackFrame->setFileName($currentFrame['file']);
             }
-            if (array_key_exists('line', $currentFrame) == true)
-            {
+            if (array_key_exists('line', $currentFrame) == true) {
                 $stackFrame->setLine($currentFrame['line']);
             }
-            if (array_key_exists('function', $currentFrame) == true)
-            {
+            if (array_key_exists('function', $currentFrame) == true) {
                 $stackFrame->setMethod($currentFrame['function']);
             }
 
             // Make it a string to force serialization of zero
-            $stackFrame->setLevel(''.$frameCounter);
+            $stackFrame->setLevel('' . $frameCounter);
 
             array_unshift($stackFrames, $stackFrame);
             $frameCounter++;
@@ -262,13 +266,11 @@ class Telemetry_Client
         $data = new Channel\Contracts\Exception_Data();
         $data->setExceptions(array($details));
 
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $data->setProperties($properties);
         }
 
-        if ($measurements != NULL)
-        {
+        if ($measurements != NULL) {
             $data->setMeasurements($measurements);
         }
 
@@ -294,9 +296,11 @@ class Telemetry_Client
         $durationInMilliseconds = 0,
         $isSuccessful = true,
         $resultCode = NULL,
-        $properties = NULL)
-    {
+        $properties = NULL,
+        $id = null
+    ) {
         $data = new Channel\Contracts\Dependency_Data();
+        $data->setId($id ?? \ApplicationInsights\Channel\Contracts\Utils::returnGuid());
         $data->setName($name);
         $data->setType($type);
         $data->setData($commandName);
@@ -304,8 +308,7 @@ class Telemetry_Client
         $data->setSuccess($isSuccessful);
         $data->setResultCode($resultCode);
 
-        if ($properties != NULL)
-        {
+        if ($properties != NULL) {
             $data->setProperties($properties);
         }
 
