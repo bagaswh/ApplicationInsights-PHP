@@ -1,19 +1,18 @@
 # Application Insights for PHP
 
-[![Build Status](https://travis-ci.org/Microsoft/ApplicationInsights-PHP.svg?branch=master)](https://travis-ci.org/Microsoft/ApplicationInsights-PHP) 
-[![Packagist Pre Release](https://img.shields.io/packagist/vpre/microsoft/application-insights.svg)](https://packagist.org/packages/microsoft/application-insights)
+## This fork is to add some missing functionalities of the original repository.
 
 This project extends the Application Insights API surface to support PHP.
 [Application
 Insights](https://azure.microsoft.com/services/application-insights/) is a
-service that allows developers to keep their application available,  performing
+service that allows developers to keep their application available, performing
 and succeeding. This PHP module will allow you to send telemetry of various
 kinds (event, trace, exception, etc.) to the Application Insights service where
 they can be visualized in the Azure Portal.
 
 ## Status
 
-This SDK is NOT maintained or supported by Microsoft even though we've contributed to it in the past. Note that Azure Monitor only provides support when using the [supported SDKs](https://docs.microsoft.com/en-us/azure/azure-monitor/app/platforms#unsupported-community-sdks). We’re constantly assessing opportunities to expand our support for other languages, so follow our [GitHub Announcements](https://github.com/microsoft/ApplicationInsights-Announcements/issues) page to receive the latest SDK news.
+This SDK is NOT maintained or supported by Microsoft even though we've contributed to it in the past. Note that Azure Monitor only provides support when using the [supported SDKs](https://docs.microsoft.com/en-us/azure/azure-monitor/app/platforms#unsupported-community-sdks). We’re constantly assessing opportunities to expand our support for other languages, so follow our [GitHub Announcements](https://github.com/bagaswh/ApplicationInsights-Announcements/issues) page to receive the latest SDK news.
 
 ## Requirements
 
@@ -23,18 +22,18 @@ For opening the project in Microsoft Visual Studio you will need [PHP Tools for 
 
 ## Installation
 
-We've published a package you can find on [Packagist](https://packagist.org/packages/microsoft/application-insights). In order to use it, first, you'll need to get [Composer](https://getcomposer.org/).
+We've published a package you can find on [Packagist](https://packagist.org/packages/bagaswh/application-insights). In order to use it, first, you'll need to get [Composer](https://getcomposer.org/).
 
 Once you've setup your project to use Composer, just add a reference to our package with whichever version you'd like to use to your composer.json file.
 
 ```json
-require: "microsoft/application-insights": "*"
+require: "bagaswh/application-insights": "*"
 ```
 
 Or you can use the composer command to automatically add the package to your composer.json file.
 
 ```json
-composer require microsoft/application-insights
+composer require bagaswh/application-insights
 ```
 
 Make sure you add the require statement to pull in the library:
@@ -47,7 +46,7 @@ require_once 'vendor/autoload.php';
 
 Once installed, you can send telemetry to Application Insights. Here are a few samples.
 
->**Note**: before you can send data to you will need an instrumentation key. Please see the [Getting an Application Insights Instrumentation Key](https://github.com/Microsoft/AppInsights-Home/wiki#getting-an-application-insights-instrumentation-key) section for more information.
+> **Note**: before you can send data to you will need an instrumentation key. Please see the [Getting an Application Insights Instrumentation Key](https://github.com/bagaswh/AppInsights-Home/wiki#getting-an-application-insights-instrumentation-key) section for more information.
 
 ### Initializing the client and setting the instrumentation key and other optional configurations
 
@@ -227,6 +226,3 @@ $telemetryClient->getContext()->getOperationContext()->setId(\ApplicationInsight
 $telemetryClient->trackMetric('differentOperationMetric', 11);
 $telemetryClient->flush();
 ```
-## Code of conduct
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
